@@ -1,17 +1,3 @@
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $number = $_POST["number"];
-    $text = $_POST["text"];
-
-    // Call Python script with user input
-    $output = shell_exec("python3 process.py " . escapeshellarg($number) . " " . escapeshellarg($text));
-
-    // Display results
-    echo "<h2>Results:</h2>";
-    echo nl2br(htmlspecialchars($output));
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +6,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Interactive Treasure Hunt</title>
 </head>
 <body>
-    <h2>Enter Your Details</h2>
+    <h2>Welcome to the Interactive Treasure Hunt!  
+Enter your details to solve the puzzle and find the treasure.</h2>
+    
     <form method="post">
         <label for="number">Enter a number:</label>
         <input type="number" id="number" name="number" required><br><br>
@@ -30,5 +18,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <button type="submit">Submit</button>
     </form>
+
+    <?php
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $number = escapeshellarg($_POST["number"]);
+        $text = escapeshellarg($_POST["text"]);
+
+        // Ejecutar el script Python
+        $output = shell_exec("python3 process.py $number $text 2>&1");
+
+        // Mostrar resultados
+        echo "<h2>Results:</h2>";
+        echo "<pre>$output</pre>";
+    }
+    ?>
 </body>
 </html>
